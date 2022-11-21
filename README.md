@@ -19,12 +19,14 @@ public class Test {
         testSimulationExample();
         testDcTowerManager();
     }
+    ...
+}
 ```
 
 ## Output
 The output of the elevator that is responding to and servicing a request will look like this.
 In this particular instance a request ([current floor: 3, destination floor: 0, trip direction: DOWN]) is assigned to elevator 1 that now needs to travel 
-from the ground floor to the 3rd floor to pick potential passengers and to take them to 
+from the ground floor to the 3rd floor to pick up potential passengers and to take them to 
 the ground floor (destination floor). The information that is displayed in the output includes the current state 
 or state transition of the elevator, as well as current floor, destination floor and 
 current trip direction. An elevator can have three states: 
