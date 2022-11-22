@@ -110,17 +110,25 @@ public class Elevator implements Runnable {
     public Integer estimateArrival(Request request) {
         int toReturn = 0;
         int helpFloor = 0;
-        if (requests.size() < 0 && state == ElevatorState.IDLE) {
-            return Math.abs(currentFloor - request.getCurrentFloor());
+        if (requests.size() == 0) {
+            if (state == ElevatorState.IDLE) {
+                return Math.abs(currentFloor - request.getCurrentFloor());
+            }
+            if (state == ElevatorState.INCOMING) {
+                return Math.abs(currentFloor - currentRequest.getCurrentFloor())
+                        + Math.abs(currentRequest.getCurrentFloor() - currentRequest.getDestinationFloor())
+                        + Math.abs(currentRequest.getDestinationFloor() - request.getCurrentFloor());
+            }
+            if (state == ElevatorState.SERVICING) {
+                return Math.abs(currentFloor - currentRequest.getDestinationFloor())
+                        + Math.abs(currentRequest.getDestinationFloor() - request.getCurrentFloor());
+            }
         }
         if (state == ElevatorState.INCOMING) {
-            helpFloor = currentRequest.getDestinationFloor();
             toReturn = Math.abs(currentFloor - currentRequest.getCurrentFloor())
-                    + Math.abs(currentRequest.getCurrentFloor() - currentRequest.getDestinationFloor())
-                    + Math.abs(currentRequest.getDestinationFloor() - request.getCurrentFloor());
+                    + Math.abs(currentRequest.getCurrentFloor() - currentRequest.getDestinationFloor());
         }
         if (state == ElevatorState.SERVICING) {
-            helpFloor = currentRequest.getDestinationFloor();
             toReturn = Math.abs(currentFloor - currentRequest.getDestinationFloor());
         }
         for (Request waitingRequests : requests) {
@@ -128,6 +136,7 @@ public class Elevator implements Runnable {
             toReturn += Math.abs(waitingRequests.getCurrentFloor() - waitingRequests.getDestinationFloor());
             helpFloor = waitingRequests.getDestinationFloor();
         }
+        toReturn += Math.abs(request.getCurrentFloor() - helpFloor);
         return toReturn;
     }
 
