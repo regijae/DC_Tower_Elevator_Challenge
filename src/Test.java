@@ -19,22 +19,22 @@ public class Test {
         System.out.println("*************************************************");
         System.out.println("*         EXAMPLE_SIMULATION_STARTED!           *");
         System.out.println("*************************************************");
-        ElevatorManager exampleManager = new ElevatorManager("Example_Manager",10, 3);
-        Request requestOne = new Request(3,0, "DOWN");
-        Request requestTwo = new Request(5,0, "DOWN");
-        Request requestThree = new Request(0,9, "UP");
-        Request requestFour = new Request(0,7, "UP");
-        Request requestFive = new Request(9,0, "DOWN");
+        ElevatorManager exampleManager = new ElevatorManager("Example_Manager",10, 2);
+        Request requestOne = new Request(0,9, "UP");
+        Request requestTwo = new Request(3,0, "DOWN");
+        Request requestThree = new Request(10,0, "DOWN");
+        Request requestFour = new Request(0,9, "UP");
+        Request requestFive = new Request(0,6, "UP");
+        Request requestSix = new Request(0,9, "UP");
         exampleManager.startManager();
         System.out.println("*************************************************");
         exampleManager.addRequest(requestOne);
-        sleep(5000);
         exampleManager.addRequest(requestTwo);
         sleep(2000);
         exampleManager.addRequest(requestThree);
-        sleep(6000);
         exampleManager.addRequest(requestFour);
         exampleManager.addRequest(requestFive);
+        exampleManager.addRequest(requestSix);
         exampleManager.shutDown();
     }
 
@@ -62,7 +62,7 @@ public class Test {
         dcTowerManager.addRequest(request3);
         dcTowerManager.addRequest(request4);
         dcTowerManager.addRequest(request5);
-        sleep(5000);
+        sleep(2000);
         assert(dcTowerManager.getAvailableElevators().size() == 2);
         dcTowerManager.addRequest(request6);
         assert(dcTowerManager.getAvailableElevators().size() == 1);

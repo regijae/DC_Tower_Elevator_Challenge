@@ -62,6 +62,7 @@ public class Elevator implements Runnable {
      * Move elevator towards the origin floor of the currently serviced request
      */
     private void moveToRequestFloor() throws InterruptedException {
+        state = ElevatorState.INCOMING;
         String direction = currentFloor < currentRequest.getCurrentFloor() ? "UP" : "DOWN";
         while (!Objects.equals(currentFloor, currentRequest.getCurrentFloor())) {
             System.out.println("Elevator_" + id + " ---> INCOMING  -  location: " + currentFloor + "  destination: "
@@ -107,15 +108,27 @@ public class Elevator implements Runnable {
      * @param request is the reference point
      */
     public Integer estimateArrival(Request request) {
-        if (state == ElevatorState.INCOMING) {
-            return Math.abs(currentFloor - currentRequest.getCurrentFloor())
-                    + Math.abs(currentRequest.getCurrentFloor() - currentRequest.getDestinationFloor())
-                    + Math.abs(currentRequest.getDestinationFloor() - request.getCurrentFloor());
-        } else if (state == ElevatorState.SERVICING) {
-            return Math.abs(currentFloor - currentRequest.getDestinationFloor());
-        } else {
+        int toReturn = 0;
+        int helpFloor = 0;
+        if (requests.size() < 0 && state == ElevatorState.IDLE) {
             return Math.abs(currentFloor - request.getCurrentFloor());
         }
+        if (state == ElevatorState.INCOMING) {
+            helpFloor = currentRequest.getDestinationFloor();
+            toReturn = Math.abs(currentFloor - currentRequest.getCurrentFloor())
+                    + Math.abs(currentRequest.getCurrentFloor() - currentRequest.getDestinationFloor())
+                    + Math.abs(currentRequest.getDestinationFloor() - request.getCurrentFloor());
+        }
+        if (state == ElevatorState.SERVICING) {
+            helpFloor = currentRequest.getDestinationFloor();
+            toReturn = Math.abs(currentFloor - currentRequest.getDestinationFloor());
+        }
+        for (Request waitingRequests : requests) {
+            toReturn += Math.abs(waitingRequests.getCurrentFloor() - helpFloor);
+            toReturn += Math.abs(waitingRequests.getCurrentFloor() - waitingRequests.getDestinationFloor());
+            helpFloor = waitingRequests.getDestinationFloor();
+        }
+        return toReturn;
     }
 
     /**
