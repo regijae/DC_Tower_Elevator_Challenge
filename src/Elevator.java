@@ -124,12 +124,17 @@ public class Elevator implements Runnable {
                         + Math.abs(currentRequest.getDestinationFloor() - request.getCurrentFloor());
             }
         }
+        if (state == ElevatorState.IDLE) {
+            helpFloor = currentFloor;
+        }
         if (state == ElevatorState.INCOMING) {
             toReturn = Math.abs(currentFloor - currentRequest.getCurrentFloor())
                     + Math.abs(currentRequest.getCurrentFloor() - currentRequest.getDestinationFloor());
+            helpFloor = currentRequest.getDestinationFloor();
         }
         if (state == ElevatorState.SERVICING) {
             toReturn = Math.abs(currentFloor - currentRequest.getDestinationFloor());
+            helpFloor = currentRequest.getDestinationFloor();
         }
         for (Request waitingRequests : requests) {
             toReturn += Math.abs(waitingRequests.getCurrentFloor() - helpFloor);
