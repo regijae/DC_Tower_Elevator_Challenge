@@ -61,10 +61,6 @@ public class ElevatorManager {
      * @return elevator with the fastest response time to request
      */
     private Elevator getElevator(Request request) {
-        ArrayList<Elevator> availableElevators = getAvailableElevators();
-        if (availableElevators.size() > 0) {
-            return availableElevators.get(0);
-        }
         Elevator closestElevator = elevators.get(0);
         for (Elevator elevator : elevators) {
             if (elevator.estimateArrival(request) < closestElevator.estimateArrival(request)) {
@@ -81,7 +77,7 @@ public class ElevatorManager {
     public ArrayList<Elevator> getAvailableElevators() {
         ArrayList<Elevator> availableElevators = new ArrayList<>();
         elevators.forEach(elevator -> {
-            if (elevator.getRequests().size() == 0) {
+            if (elevator.getRequests().size() == 0 && elevator.getState() == ElevatorState.IDLE) {
                 availableElevators.add(elevator);
             }
         });
