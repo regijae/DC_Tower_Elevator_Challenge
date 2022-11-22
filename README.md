@@ -1,11 +1,9 @@
 # DC Tower Elevator Challenge
 
 The DC Tower Elevator Manager is tasked with servicing elevator transport 
-requests by assigning them to the right elevator instance. It does so by first 
-searching for elevators that are idle. If there aren't any, it finds the elevator with 
-the fastest estimated response time and assigns the request to it. 
-When the chosen elevator finishes servicing prior requests it will 
-service the newly added one.
+requests by assigning them to the right elevator instance. It finds the elevator with 
+the fastest estimated response time and assigns the request to it. Furthermore, 
+each elevator services one request at a time (no stops).
 
 ## Test
 
